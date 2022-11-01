@@ -1,60 +1,81 @@
-class Filme:
 
-    def __init__(self, nome, ano, duracao):
-        self.__nome = nome.title()
+class Programa:
+    def __init__(self, nome, ano):
+        self._nome = nome.title()
         self.ano = ano
-        self.duracao = duracao
-        self.__likes = 0
+        self._likes = 0
 
     @property
     def likes(self):
-        return self.__likes
+        return self._likes
 
     @property
     def nome(self):
-        return self.__nome
+        return self._nome
 
     @nome.setter
     def nome(self, novo_nome):
-        self.__nome = novo_nome
+        self._nome = novo_nome.title()
 
     def dar_like(self):
-        self.__likes += 1
+        self._likes += 1
 
-    def exibir_dados(self):
-        print(f"Filme: {self.__nome}, Ano: {self.ano}, Duração: {self.duracao}")
+    def __str__(self):
+        return f"Filme: {self._nome}, Ano: {self.ano}, {self.likes} Likes"
 
 
-class Serie:
+class Filme(Programa):
+
+    def __init__(self, nome, ano, duracao):
+        super().__init__(nome, ano)
+        self.duracao = duracao
+
+    def __str__(self):
+        return f"Filme: {self._nome}, Ano: {self.ano}, Duração: {self.duracao} min, {self.likes} Likes"
+
+
+class Serie(Programa):
 
     def __init__(self, nome, ano, temporadas):
-        self.__nome = nome.title()
-        self.ano = ano
+        super().__init__(nome, ano)
         self.temporadas = temporadas
-        self.__likes = 0
 
-    @property
-    def likes(self):
-        return self.__likes
-
-    def dar_likes(self):
-        self.__likes += 1
-
-    @property
-    def nome(self):
-        return self.__nome
-
-    @nome.setter
-    def nome(self, novo_nome):
-        self.__nome = novo_nome
-
-    def exibir_dados(self):
-        print(f"Série: {self.__nome}, Ano: {self.ano}, Temporadas: {self.temporadas}")
+    def __str__(self):
+        return f"Série: {self._nome}, Ano: {self.ano}, Temporadas: {self.temporadas}, {self.likes} Likes"
 
 
-filme1 = Filme("Vingadores", 2010, 240)
-serie1 = Serie("One Piece", 1995, 17)
+class PlayList:
+    def __init__(self, nome, programas):
+        self.nome = nome
+        self._programas = programas
 
-Filme.exibir_dados(filme1)
-Serie.exibir_dados(serie1)
+    def __getitem__(self, item):
+        return self._programas[item]
 
+    def __len__(self):
+        return len(self._programas)
+
+
+vingadores = Filme('vingadores - guerra infinita', 2018, 160)
+atlanta = Serie('atlanta', 2018, 2)
+tmep = Filme('Todo mundo em pânico', 1999, 100)
+demolidor = Serie('Demolidor', 2016, 2)
+
+vingadores.dar_like()
+tmep.dar_like()
+tmep.dar_like()
+tmep.dar_like()
+tmep.dar_like()
+demolidor.dar_like()
+demolidor.dar_like()
+atlanta.dar_like()
+atlanta.dar_like()
+atlanta.dar_like()
+
+filmes_e_series = [vingadores, atlanta, demolidor, tmep]
+playlist_fim_de_semana = PlayList('fim de semana', filmes_e_series)
+
+print(f'Tamanho do playlist: {len(playlist_fim_de_semana)}')
+
+for programa in playlist_fim_de_semana:
+    print(programa)
